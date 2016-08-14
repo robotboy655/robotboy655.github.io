@@ -4,6 +4,10 @@ This document describes how you can mod the [Star Wars Lightsabers](http://steam
 
 Note that I will not provide help if you do not know what you are doing ( i.e. You do not know how to program )
 
+I will also not provide any help with extracted version of this mod ( or any other mod ), nor I will help you with editing the mod.
+
+You may not upload edited or not version of this mod anywhere. You may upload self contained addons that use the APIs below.
+
 ## Tool Modding
 
 How to add new stuff to the Sandbox tool. All of the code in this section **must** be called shared - both on client and server.
@@ -55,14 +59,14 @@ list.Set( "rb655_LightsaberHumSounds", "#myCustomUniqueInternalName", {
 
 This section describes ways you can affect the Weapon and Entity of the mod.
 
-### Custom damage for lightsaber ( Weapon and Entity )
+### Custom damage for lightsaber ( Weapon and Entity, Serverside )
 ```
 hook.Add( "CanLightsaberDamageEntity", "my_unqiue_hook_name_here", function( victim, lightsaber, trace )
 	return 50 -- Makes the damage twice as high for the weapon
 end )
 ```
 
-### Preventing force power usage
+### Preventing force power usage ( Weapon, Serverside )
 ```
 GM:CanUseLightsaberForcePower( Entity owner, string power ) - return false to disallow owner to use given Force Power
 ```
@@ -86,7 +90,7 @@ hook.Add( "CanUseLightsaberForcePower", "my_unqiue_hook_name_here", function( pl
 end )
 ```
 
-### Spawning the weapon and giving it custom colors, etc
+### Spawning the weapon and giving it custom colors, etc ( Serverside )
 ```
 local ply = Entity( 1 ) -- This is your player object
 
