@@ -66,10 +66,13 @@ hook.Add( "CanLightsaberDamageEntity", "my_unqiue_hook_name_here", function( vic
 end )
 ```
 
-### Preventing force power usage ( Weapon, Serverside )
+### Preventing force power usage ( Weapon, Shared )
 ```
-GM:CanUseLightsaberForcePower( Entity owner, string power ) - return false to disallow owner to use given Force Power
+GM:CanUseLightsaberForcePower( Entity owner, string power ) - return false to disallow owner to use and hide given Force Power from UI
 ```
+
+Serverside, prevents usage of said force power, clientside, hides the Force Power from the HUD.
+
 Examples:
 ```
 -- Prevents everyone from using any force powers
@@ -88,6 +91,16 @@ end )
 hook.Add( "CanUseLightsaberForcePower", "my_unqiue_hook_name_here", function( ply, power )
 	if ( power == "Force Combust" ) then return false end
 end )
+```
+
+List of current Force Powers:
+```
+"Force Leap"
+"Force Absorb"
+"Force Repulse"
+"Force Heal"
+"Force Combust"
+"Force Lightning"
 ```
 
 ### Spawning the weapon and giving it custom colors, etc ( Serverside )
@@ -127,3 +140,13 @@ wep:SetForce( 100 ) -- Starting Amount of Force. Will autoregen to 100.
  * quillon1
  * quillon2
  * quillon3 - etc, format for Kylo Ren-like crossguard blades.
+
+## Console variables
+
+Console Variable | Default | Realm | Info
+------------ | ------------- | ------------- | -------------
+```rb655_lightsaber_hiltonbelt``` ```1/0```|1|Server|Show the Lightsaber hilt on player models belt if you holster your Lightsaber
+```rb655_lightsaber_hud_blur``` ```1/0```|0|Client|Enables the fancy blur effect on the Lightsaber SWEP HUD. It **will** kill your FPS
+```rb655_lightsaber_infinite``` ```1/0```|0|Server|Enables infinite Force
+```sbox_maxent_lightsabers``` ```<number>```|2|Server|Server Lightsaber Entity limit
+```rb655_lightsaber_allow_knockback``` ```1/0```|1|Server|Allow Lightsaber SWEP to knock players back when they are damaged by it
