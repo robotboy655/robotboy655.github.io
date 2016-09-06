@@ -66,6 +66,13 @@ hook.Add( "CanLightsaberDamageEntity", "my_unqiue_hook_name_here", function( vic
 end )
 ```
 
+```
+hook.Add( "CanLightsaberDamageEntity", "my_unqiue_hook_name_here", function( victim, lightsaber, trace )
+	if ( lightsaber:IsWeapon() ) then return 100 end -- If the Ligthsaber is the Weapon/SWEP counterpart, deal 100 damage
+	return false -- If the lightsaber is an Entity/SENT, deal no damage at all.
+end )
+```
+
 ### Preventing force power usage ( Weapon, Shared )
 ```
 GM:CanUseLightsaberForcePower( Entity owner, string power ) - return false to disallow owner to use and hide given Force Power from UI
