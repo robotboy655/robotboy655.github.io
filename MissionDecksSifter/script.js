@@ -195,6 +195,8 @@ function LoadGetValues( b ) {
 	var GET = window.location.search.substr( 1 );
 	if ( GET && GET.length > 0 ) {
 		OpenInSearch( unescape( GET ), b );
+	} else if ( b ) {
+		OpenInSearch( "", true );
 	}
 }
 
