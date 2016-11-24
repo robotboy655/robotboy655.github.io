@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet"></link>
+		<script src="script.js"></script>
+		<title>Warframe Mission Deck Sniffer</title>
+		<style>
+			* {
+				font-family: 'Roboto', sans-serif;
+			}
+			div.container_main {
+				left: 20%;
+				width: 60%;
+				position: relative;
+			}
+			input {
+				width: 100%;
+				height: 40px;
+				outline: 0;
+				border-radius: 5px;
+				border: 1px #ccc solid;
+				padding: 10px;
+				margin: 5px 0;
+				box-shadow: inset 3px 3px 6px -3px rgba(0,0,0,.1);
+			}
+
+			div.res {
+				margin: 5px 0;
+				border: 1px solid #eee;
+				border-radius: 4px;
+				margin-bottom: 5px;
+			}
+			div.header {
+				padding: 10px 15px;
+				color: black;
+				display: block;
+				border-radius: 5px 5px 0 0;
+			}
+			div.container {
+				margin-bottom: 3px;
+				border-top: 1px solid #eee;
+				border-bottom: 1px solid #eee;
+			}
+			
+			div.item {
+				padding: 5px;
+				background: #fff;
+			}
+			div.item:nth-child( 2n ) {
+				background: #fcfcfc;
+			}
+			
+			a { 
+				text-decoration: none;
+				font-weight: bold;
+				color: #08f;
+			}
+			
+			div.footer {
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container_main">
+			<input type="text" placeholder="Start typing.." id="searchbar" onkeydown="SearchMeUp( this )" />
+			<div id="results">
+				
+			</div>
+			<div id="results_default">
+				<div class="res">
+					<div class="header">
+						Usage information:
+					</div>
+					<div class="container">
+						<div class="item">
+							Type in partial name for suggestions<br/>
+							Type in full name for full information about the object<br/>
+							<br/>
+							Supported objects:
+							<ul>
+								<li>Items that drop from missions/relics</li>
+								<li>Planets</li>
+								<li>Nodes</li>
+								<li>Relics</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				Data provided by <a href="https://github.com/VoiDGlitch/WarframeData">VoiDGlitch</a>. <a href="https://warframe.com/">Warframe</a> is a property of <a href="http://www.digitalextremes.com/">Digital Extremes</a>.
+			</div>
+		</div>
+	</body>
+</html>
