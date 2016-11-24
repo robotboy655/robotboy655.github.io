@@ -24,7 +24,7 @@ MissionTypes[ "MT_COUNTER_INTEL" ] = [ "Deception", -1 ];
 MissionTypes[ "MT_EXCAVATE" ] = [ "Excavation", -1 ];
 MissionTypes[ "MT_Race" ] = [ "Race", -1 ];
 MissionTypes[ "MT_PURSUIT" ] = [ "Pursuit", -1 ];
-MissionTypes[ "MT_ARENA" ] = [ "Rathuum Area", -1 ];
+MissionTypes[ "MT_ARENA" ] = [ "Arena", -1 ];
 MissionTypes[ "MT_RACE" ] = [ "Archwing Rush", -1 ];
 MissionTypes[ "MT_PVP" ] = [ "Conclave", -1 ];
 function MissionType( s ) {
@@ -201,10 +201,10 @@ function LoadGetValues( b ) {
 }
 
 function SearchMeUp( e ) {
-	console.log( e, e.target, event )
-	var bleh = event.target
+	//console.log( e, e.target, event )
+	//var bleh = event.target
 	setTimeout( function() {
-		DoSearch( bleh.value.toLowerCase() ); 
+		DoSearch( document.getElementById( "searchbar" ).value.toLowerCase() ); 
 	}, 200 )
 }
 
