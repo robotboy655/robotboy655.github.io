@@ -227,6 +227,9 @@ function CreateCard( data ) {
 function CreateSearchLink( txt ) {
 	return "<a href='?" + txt + "' onclick='return OpenInSearch( this )'>" + txt + "</a>"
 }
+function CreateWikiLink( txt ) {
+	return "<a href='http://warframe.wikia.com/wiki/" + txt + "'>Wiki</a>"
+}
 
 function ParseItem( str ) {
 	var start = str.indexOf( " " );
@@ -238,8 +241,8 @@ function ParseItem( str ) {
 }
 
 function Item( item, count ) {
-	if ( !count || count < 2 ) return item
-	return count + " " + name
+	if ( !count || count < 2 ) return CreateSearchLink( item )
+	return count + "x " + CreateSearchLink( item )
 }
 
 function DoSearch( txt ) {
@@ -276,7 +279,7 @@ function DoSearch( txt ) {
 		var val = NodeDataSets[ key ];
 
 		if ( key.toLowerCase() == txt ) {
-			var drops = "";
+			var drops = "<div class='table'>";
 			var dropItems = DataSets[ val.DataSet ].Items
 
 			if ( dropItems.length < 1 ) {
@@ -285,10 +288,11 @@ function DoSearch( txt ) {
 				// Should do proper table formatting and rotation grouping!
 				for ( var i = 0; i < dropItems.length; i++ ) {
 					var item = ParseItem( dropItems[ i ][ 0 ] )
-					drops += "<div class='item'>" + ( ( item.Count > 1 ) ? ( item.Count + "x " ) : "") + CreateSearchLink( item.Item ) + 
-					" | " + dropItems[ i ][ 1 ] + " | " + dropItems[ i ][ 2 ] + " | Rotation " + dropItems[ i ][ 3 ] + 
-					"</div>";
+					drops += "<div class='item row'><span class='cell'>" + ( ( item.Count > 1 ) ? ( item.Count + "x " ) : "") + CreateSearchLink( item.Item ) + 
+					"</span><span class='cell'>" + dropItems[ i ][ 1 ] + "</span><span class='cell'>" + dropItems[ i ][ 2 ] + "</span><span class='cell'>Rotation " + dropItems[ i ][ 3 ] + 
+					"</span></div>";
 				}
+				drops += "</div>";
 			}
 			
 			res += CreateCard( { header: "Node", body: "<div class='item' onclick='return ExpandNode( \"" + key + "\" )'>" + CreateSearchLink( key ) + 
@@ -311,7 +315,7 @@ function DoSearch( txt ) {
 		var val = ItemDataSets[ key ];
 
 		if ( key.toLowerCase() == txt ) {
-			var drops = "";
+			var drops = "<div class='table'>";
 
 			if ( val.length < 1 ) {
 				drops = "<div class='item'>Unknown?</div>";
@@ -323,21 +327,22 @@ function DoSearch( txt ) {
 					var item = ParseItem( val[ i ][ 0 ] )
 					for ( var j = 0; j < missions.length; j++ ) { // This is probably wrong and will be wrong when the same item is two times in 1 drop table
 						var misVal = missions[ j ];
-						drops += "<div class='item'>" + CreateSearchLink( misVal[ 0 ] ) + ", " + CreateSearchLink( misVal[ 1 ] ) + " - " + Faction( misVal[ 3 ] ) + " " + 
-						MissionType( misVal[ 2 ] ) + " " + NodeType( misVal[ 4 ] ) + ( ( item.Count > 1 ) ? ( " | " + item.Count + "x" ) : "" ) + 
-						" | " + val[ i ][ 1 ] + " | " + val[ i ][ 2 ] + " | Rotation " + val[ i ][ 3 ] + 
-						"</div>";
+						drops += "<div class='item row'><span class='cell'>" + ( ( item.Count > 1 ) ? ( "( " + item.Count + "x ) " ) : "" ) + CreateSearchLink( misVal[ 1 ] ) + ", " + CreateSearchLink( misVal[ 0 ] ) + "</span><span class='cell'>" + Faction( misVal[ 3 ] ) + "</span><span class='cell'>" + 
+						MissionType( misVal[ 2 ] ) + "</span><span class='cell'>" + NodeType( misVal[ 4 ] ) + 
+						"</span><span class='cell'>" + val[ i ][ 1 ] + "</span><span class='cell'>" + val[ i ][ 2 ] + "</span><span class='cell'>Rotation " + val[ i ][ 3 ] + 
+						"</span></div>";
 					}
 				}
 				
 				// The drop tables for this item are not from any nodes!
-				if ( drops == "" ) {
+				if ( drops == "<div class='table'>" ) {
 					for ( var i = 0; i < val.length; i++ ) {
-						drops += "<div class='item'>" + CreateSearchLink( val[ i ][ 4 ] ) + ( ( item.Count > 1 ) ? ( " | " + item.Count + "x" ) : "" ) + 
-						" | " + val[ i ][ 1 ] + " | " + val[ i ][ 2 ] + " | Rotation " + val[ i ][ 3 ] + 
-						"</div>";
+						drops += "<div class='item row'><span class='cell'>" + ( ( item.Count > 1 ) ? ( "( " + item.Count + "x ) " ) : "" ) + CreateSearchLink( val[ i ][ 4 ] ) + 
+						"</span><span class='cell'>" + val[ i ][ 1 ] + "</span><span class='cell'>" + val[ i ][ 2 ] + "</span><span class='cell'>Rotation " + val[ i ][ 3 ] + 
+						"</span></div>";
 					}
 				}
+				drops += "</div>";
 			}
 
 			res += CreateCard( { header: "Item", body: "<div class='item' onclick='return ExpandItem( \"" + key + "\" )'>" + CreateSearchLink( key ) + "<br/><br/>Drops On:" + drops + "</div>" } );
@@ -358,7 +363,7 @@ function DoSearch( txt ) {
 			var contents = "";
 
 			if ( val.Drops.length < 1 ) {
-				drops = "<div class='item'>Unknown?</div>";
+				drops = "<div class='item'>Unknown ( Vaulted )</div>";
 			} else {
 				var dropsTable = [];
 		
@@ -385,13 +390,15 @@ function DoSearch( txt ) {
 				}
 	
 				dropsTable.sort( function( a, b ) { return b.Chance - a.Chance } );
+				drops += "<div class='table'>";
 				for ( var i = 0; i < dropsTable.length; i++ ) {
 					var drop = dropsTable[ i ];
-					drops += "<div class='item'>" + CreateSearchLink( drop.Planet ) + ", " + CreateSearchLink( drop.Node ) + " - " + Faction( drop.Faction ) + " " + 
-						MissionType( drop.MissionType ) + " " + NodeType( drop.NodeType ) + ( ( drop.Count > 1 ) ? ( " | " + drop.Count + "x" ) : "" ) + 
-						" | " + drop.Rarity + " | " + drop.Chance + "% | Rotation " + drop.Rotation + 
-						"</div>";
+					drops += "<div class='item row'><span class='cell'>" + CreateSearchLink( drop.Node ) + ", " + CreateSearchLink( drop.Planet ) + "</span><span class='cell'>" + Faction( drop.Faction ) + "</span><span class='cell'>" + 
+						MissionType( drop.MissionType ) + "</span><span class='cell'>" + NodeType( drop.NodeType ) + ( ( drop.Count > 1 ) ? ( "</span><span class='cell'>" + drop.Count + "x" ) : "" ) + 
+						"</span><span class='cell'>" + drop.Rarity + "</span><span class='cell'>" + drop.Chance + "%</span><span class='cell'>Rotation " + drop.Rotation + 
+						"</span></div>";
 				}
+				drops += "</div>";
 			}
 			
 			if ( val.Contents.length < 1 ) {
@@ -405,12 +412,15 @@ function DoSearch( txt ) {
 				val.Contents.sort( function( a, b ) { return sortTable[ a[ 1 ] ] - sortTable[ b[ 1 ] ] } )
 
 				// Should do proper table formatting and rotation grouping!
+				contents += "<div class='table'>";
 				for ( var i = 0; i < val.Contents.length; i++ ) {
 					var drop = val.Contents[ i ];
 					
 					var item = ParseItem( drop[ 0 ] );
-					contents += "<div class='item'>" + CreateSearchLink( Item( item.Item, item.Count ) ) + " | " + drop[ 1 ] + " | " + drop[ 2 ] + " | " + drop[ 3 ] + " | " + drop[ 4 ] + " | " + drop[ 5 ] + " | " + drop[ 6 ] + "</div>";
+					contents += "<div class='item row'><span class='cell'>" + Item( item.Item, item.Count ) + "</span><span class='cell'>" + drop[ 1 ] + "</span><span class='cell'>" + drop[ 2 ] + 
+					"</span><span class='cell'>" + drop[ 3 ] + "</span><span class='cell'>" + drop[ 4 ] + "</span><span class='cell'>" + drop[ 5 ] + "</span><span class='cell'>" + (drop[ 6 ] || "") + "</span></div>";
 				}
+				contents += "</div>";
 			}
 
 			res += CreateCard( { header: "Relic", body: "<div class='item' onclick='return ExpandRelic( \"" + key + "\" )'>" + CreateSearchLink( key ) + "<br/><br/>Contents:" + contents + "<br/>Drops On:" + drops + "</div>" } );
@@ -432,22 +442,71 @@ function DoSearch( txt ) {
 			if ( val.length < 1 ) {
 				drops = "<div class='item'>Unknown?</div>";
 			} else {
+				drops += "<div class='table'>";
 				for ( var i = 0; i < val.length; i++ ) {
 					var dropPlace = val[ i ];
-					drops += "<div class='item'>" + CreateSearchLink( dropPlace.Relic ) + 
-					" | " + dropPlace.Rarity + " | (Intact) " + dropPlace.Intact + "% - " + dropPlace.Excellect + "% - " + dropPlace.Flawless + "% - " + dropPlace.Radiant + "% (Radiant) | " + dropPlace.Ducats + " Ducats" + 
+					drops += "<div class='item row'><span class='cell'>" + CreateSearchLink( dropPlace.Relic ) + 
+					"</span><span class='cell'>" + dropPlace.Rarity + "</span><span class='cell'>" + dropPlace.Intact + "% (Intact)</span><span class='cell'>" + dropPlace.Excellect + "% (Excellect)</span><span class='cell'>" + dropPlace.Flawless + 
+					"% (Flawless)</span><span class='cell'>" + dropPlace.Radiant + "% (Radiant)</span><span class='cell'>" + ( dropPlace.Ducats > 0 ? dropPlace.Ducats + " Ducats" : "" ) + "</span>" + 
 					"</div>";
 				}
+				drops += "</div>";
 			}
 
-			res += CreateCard( { header: "Item", body: "<div class='item' onclick='return ExpandItem( \"" + key + "\" )'>" + CreateSearchLink( key ) + "<br/><br/>Drops On:" + drops + "</div>" } );
+			res += CreateCard( { header: "Prime Part", body: "<div class='item' onclick='return ExpandItem( \"" + key + "\" )'>" + CreateSearchLink( key ) + "<br/><br/>Drops On:" + drops + "</div>" } );
 			continue;//break;
 		}
 
 		if ( key.toLowerCase().indexOf( txt ) < 0 ) continue;
 		items.push( "<div class='item'>" + CreateSearchLink( key ) + "</div>" );
 	}
-	if ( items.length > 0 ) res += CreateCard( { header: "Prime Items Matches", body: items.join( "" ) } );
+	if ( items.length > 0 ) res += CreateCard( { header: "Prime Parts Matches", body: items.join( "" ) } );
+
+	var items = [];
+	for ( key in DataSets ) {
+		var val = DataSets[ key ];
+
+		if ( key.toLowerCase() == txt ) {
+			var drops = "";
+			var missions = val.Missions;
+
+			if ( missions.length < 1 ) {
+				drops = "<div class='item'>Unknown</div>";
+			} else {
+				drops += "<div class='table'>";
+				for ( var i = 0; i < missions.length; i++ ) {
+					var mission = missions[ i ];
+					drops += "<div class='item row'><span class='cell'>" + CreateSearchLink( mission[ 1 ] ) + "</span><span class='cell'>" + CreateSearchLink( mission[ 0 ] ) + 
+					"</span><span class='cell'>" + CreateSearchLink( Faction( mission[ 3 ] ) ) + "</span><span class='cell'>" + CreateSearchLink( MissionType( mission[ 2 ] ) ) + "</span><span class='cell'>" + CreateSearchLink( NodeType( mission[ 4 ] ) ) + 
+					"</span></div>";
+				}
+				drops += "</div>";
+			}
+
+			var drops2 = "";
+			var itemz = val.Items;
+			if ( itemz.length < 1 ) {
+				drops2 = "<div class='item'>Unknown</div>";
+			} else {
+				drops2 += "<div class='table'>";
+				for ( var i = 0; i < itemz.length; i++ ) {
+					var item = itemz[ i ];
+					var pItem = ParseItem( item[ 0 ] )
+					drops2 += "<div class='item row'><span class='cell'>" + Item( pItem.Item, pItem.Count ) + "</span><span class='cell'>" + item[ 1 ] + 
+					"</span><span class='cell'>" +  item[ 2 ]  + "</span><span class='cell'>Rotation " + item[ 3 ] +
+					"</span></div>";
+				}
+				drops2 += "</div>";
+			}
+
+			res += CreateCard( { header: "Drop Table", body: "<div class='item' onclick='return ExpandItem( \"" + key + "\" )'>" + CreateSearchLink( key ) + "<br/><br/>Drops On:" + drops + "<br/><br/>Drops:" + drops2 + "</div>" } );
+			break;
+		}
+
+		if ( key.toLowerCase().indexOf( txt ) < 0 ) continue;
+		items.push( "<div class='item'>" + CreateSearchLink( key ) + "</div>" );
+	}
+	if ( items.length > 0 ) res += CreateCard( { header: "Drop Table Matches", body: items.join( "" ) } );
 
 	if ( res.trim() == "" ) {
 		res = '<div class="res"><div class="header">Failed</div><div class="container"><div class="item">Nothing Found!</div></div></div>'
@@ -456,6 +515,6 @@ function DoSearch( txt ) {
 	document.getElementById( "results" ).innerHTML = res;
 }
 
-window.onpopstate = function(e){
+window.onpopstate = function( e ) {
 	LoadGetValues( true );
 };
