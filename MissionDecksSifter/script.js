@@ -203,7 +203,8 @@ function CreateSearchLink( txt ) {
 	return "<a href='?" + txt + "' onclick='return OpenInSearch( this )'>" + txt + "</a>"
 }
 function CreateWikiLink( txt ) {
-	return "<a href='http://warframe.wikia.com/wiki/" + txt + "'>Wiki</a>"
+	return "<a target='_blank' href='http://warframe.wikia.com/wiki/Special:Search?query=" + txt + "'>Search on Wiki</a>"
+	//return "<a href='http://warframe.wikia.com/wiki/" + txt + "'>Wiki</a>"
 }
 
 function ParseItem( str ) {
@@ -337,7 +338,7 @@ function DoSearch( txt ) {
 			for ( k in val ) {
 				nodes.push( CreateSearchLink( k ) )
 			}
-			res += CreateCard( { header: "Planet", body: "<div class='item'>" + CreateSearchLink( key ) + "<br/><br/>Nodes:<br/>" + nodes.join( ", " )  + "</div>" } );
+			res += CreateCard( { header: "Planet", body: "<div class='item'>" + CreateSearchLink( key ) + " ( " + CreateWikiLink( key ) + " )<br/><br/>Nodes:<br/>" + nodes.join( ", " )  + "</div>" } );
 			break;
 		}
 
@@ -417,7 +418,7 @@ function DoSearch( txt ) {
 				}
 			}
 
-			res += CreateCard( { header: "Item", body: "<div class='item'>" + CreateSearchLink( key ) + "<br/><br/>Drops On:</div><div class='table'>" + drops + "</div>" } );
+			res += CreateCard( { header: "Item", body: "<div class='item'>" + CreateSearchLink( key ) + " ( " + CreateWikiLink( key ) + " )<br/><br/>Drops On:</div><div class='table'>" + drops + "</div>" } );
 			continue;//break;
 		}
 
@@ -528,7 +529,7 @@ function DoSearch( txt ) {
 				}
 			}
 
-			res += CreateCard( { header: "Prime Part", body: "<div class='item'>" + CreateSearchLink( key ) + "<br/><br/>Drops From:</div><div class='table'>" + drops + "</div>" } );
+			res += CreateCard( { header: "Prime Part", body: "<div class='item'>" + CreateSearchLink( key ) + " ( " + CreateWikiLink( key ) + " )<br/><br/>Drops From:</div><div class='table'>" + drops + "</div>" } );
 			continue;//break;
 		}
 
