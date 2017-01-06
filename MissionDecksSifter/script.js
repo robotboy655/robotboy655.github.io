@@ -27,6 +27,7 @@ MissionTypes[ "MT_PURSUIT" ] = [ "Pursuit", -1 ];
 MissionTypes[ "MT_ARENA" ] = [ "Arena", -1 ];
 MissionTypes[ "MT_RACE" ] = [ "Archwing Rush", -1 ];
 MissionTypes[ "MT_PVP" ] = [ "Conclave", -1 ];
+MissionTypes[ "MT_PURIFY" ] = [ "Salvage", -1 ];
 function MissionType( s ) {
 	if ( MissionTypes[ s ] ) return MissionTypes[ s ][ 0 ];
 	console.log( "Unknown Mission Type: " + s )
@@ -38,10 +39,12 @@ var NodeTypes = {
 	NT_MISSION: "Mission",
 	NT_EVENT: "Event",
 	NT_PVP: "Mission", // "Conclave Mission"
+	NT_UNKNOWN: "Unknown Mission"
 };
 function NodeType( s ) {
 	if ( NodeTypes[ s ] ) return NodeTypes[ s ];
-	console.log( "Unknown Node Type: " + s )
+	console.log( "Unknown Node Type: " + s );
+	//throw "Bad node type"
 	return s
 }
 
@@ -66,7 +69,7 @@ function StartDataLoad() {
 StartDataLoad()
 
 var JSONDataSet = {};
-var DataSets = {};
+//var DataSets = {};
 var PlanetDataSets = {};
 var NodeDataSets = {};
 var ItemDataSets = {};
@@ -149,7 +152,7 @@ function OnDataLoaded( data ) {
 		}
 	}
 
-	console.log( DataSets );
+	//console.log( DataSets );
 	console.log( PlanetDataSets );
 	console.log( NodeDataSets );
 	console.log( ItemDataSets );
@@ -229,8 +232,10 @@ function ParseItemLine( str ) {
 	var item = ParseItem( t[ 0 ] )
 
 	if ( t.length == 2 ) {
+		// The Index
+
 		t[ 2 ] = t[ 1 ];
-		t[ 1 ] = "???";
+		t[ 1 ] = "Rarity Unset";
 	}
 
 	if ( t.length == 6 || t.length == 7 ) {
@@ -264,7 +269,19 @@ function ParseRelicItemLine( str ) {
 }
 
 function ParseLocation( str ) {
-	var t = str.split( ", " );
+	//Hack!!!!
+	if ( typeof( str ) == "object" ) {
+		//console.log( "BAD DATA" );
+		
+		var newStr = "";
+		for ( keyName in str ) {
+			newStr += keyName + " " + str[ keyName ];
+		}
+		str = newStr;
+		//console.log( str );
+	}
+
+	var t = str.split( "," ).map( Function.prototype.call, String.prototype.trim );
 	return {
 		Planet: t[ 0 ],
 		Node: t[ 1 ],
@@ -272,8 +289,8 @@ function ParseLocation( str ) {
 		MissionTypeNice: MissionType( t[ 2 ] ),
 		Faction: t[ 3 ],
 		FactionNice: Faction( t[ 3 ] ),
-		NodeType: t[ 4 ],
-		NodeTypeNice: NodeType( t[ 4 ] )
+		NodeType: t[ 4 ] || "NT_UNKNOWN",
+		NodeTypeNice: NodeType( t[ 4 ] || "NT_UNKNOWN" )
 	}
 }
 
