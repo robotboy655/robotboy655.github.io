@@ -110,6 +110,23 @@ List of current Force Powers:
 "Force Lightning"
 ```
 
+### Adding new force powers
+```
+rb655_AddForcePower( {
+	name = "My Force Power", -- Name of the force power, used in hooks too.
+	icon = "C", -- The letter that will appear on the bottom of the screen
+	description = "Description", -- Description, appears in the bottom of the screen
+	action = function( self )
+		if ( self:GetForce() < 16 or CLIENT ) then return end -- Do not run this function if our force is below 16% or on client
+
+		-- Do your custom stuff here
+
+		self:SetForce( self:GetForce() - 4 ) -- Take 4% force away on use
+		self:SetNextAttack( 1 ) -- Sets next attack ( both swing and force power )
+	end
+} )
+```
+
 ### Spawning the weapon and giving it custom colors, etc ( Serverside )
 ```
 local ply = Entity( 1 ) -- This is your player object
