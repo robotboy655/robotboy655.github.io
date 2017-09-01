@@ -6,7 +6,7 @@
 		<Language name="Gmod Lua" ext="lua" commentLine="--" commentStart="--[[" commentEnd="]]">
 			<!-- KEYWORDS -->
 			<Keywords name="0">
-				and break do else elseif end false for function if in local nil not or repeat return then true until while continue
+				and break do else elseif end false for function if in local nil not or repeat return then true until while continue goto
 			</Keywords>
 			<!-- GLOBAL VARS -->
 			<Keywords name="1">
