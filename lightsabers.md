@@ -113,8 +113,9 @@ List of current Force Powers:
 ### Adding new force powers
 ```
 rb655_AddForcePower( {
-	name = "My Force Power", -- Name of the force power, used in hooks too.
-	icon = "C", -- The letter that will appear on the bottom of the screen
+	name = "My Force Power", -- Name of the force power, used in hooks too
+	icon = "C", -- The letter that will appear on the bottom of the screen, optional
+	material = Material( "icon16/cross.png" ), -- The material to display instead of the letter icon, optional
 	description = "Description", -- Description, appears in the bottom of the screen
 	action = function( self )
 		if ( self:GetForce() < 16 or CLIENT ) then return end -- Do not run this function if our force is below 16% or on client
@@ -126,6 +127,42 @@ rb655_AddForcePower( {
 	end
 } )
 ```
+( ply, bind, pressed ) - return anything to block default action
+### Adding custom HUD, hiding default HUD ( Weapon, Clientside )
+```
+GM:LightsaberDrawHUD( bool SelectionEnabled, number Force, number MaxForce, number SelectedForceID, table forcePowersTable )
+
+Return anything but nil to hide default HUD, returning a number will make the error messages on HUD appear at that Y position. 
+```
+
+Clientside, allows you to create custom HUDs for the lightsabers mod for your server or whatever without having to edit the mod itself.
+
+Examples:
+```
+-- Prevents everyone from using any force powers
+hook.Add( "LightsaberDrawHUD", "my_unqiue_hud_hook_name_here", function( ForceSelectEnabled, Force, MaxForce, SelectedPower, ForcePowers  )
+	-- Draw your HUD here using the passed arguments
+	return ScrH() -- Return a number as an offset for error message HUD or otherwise a non nil-value 
+end )
+```
+
+### Preventing default Force Power selection functionality ( Weapon, Clientside )
+```
+GM:LightsaberPlayerBindPress( ply, bind, pressed )
+
+Return anything but nil to prevent the default Force Power selection functionality
+```
+
+Same as the default GM:PlayerBindPress, but returning anything non-nil will prevent the F and 1,2,3,4,5,6-etc keys from affecting the HUD, in case you want to have some custom HUD force power selection or something.
+
+Keep in mind that people can still select Force Powers using the following console commands:
+
+Console Command | Info
+------------ | ------------- 
+```rb655_select_force <number>```|Directly selects the Force Power at given slot
+```rb655_select_next 1```|Selects the Force Power at the next slot
+```rb655_select_next -1```|Selects the Force Power at the previous slot
+
 
 ### Spawning the weapon and giving it custom colors, etc ( Serverside )
 ```
@@ -141,7 +178,6 @@ wep:SetCrystalColor( Vector( 255, 0, 0 ) ) -- Blade color - must be a Vector, no
 wep:SetDarkInner( false ) -- Whether the blade inner part is dark or not
 wep:SetWorldModel( "models/sgg/starwars/weapons/w_anakin_ep2_saber_hilt.mdl" ) -- The full model path
 wep:SetBladeWidth( 20 ) -- Blade width
-wep:WorksUnderwater( false ) -- Default = true, if set to false, will auto disable upon entering water
 
 wep.LoopSound = "lightsaber/saber_loop" .. math.random( 1, 8 ) .. ".wav" -- Hum sound, full paths
 wep.SwingSound = "lightsaber/saber_swing" .. math.random( 1, 2 ) .. ".wav" -- Swing sound
@@ -149,8 +185,10 @@ wep:SetOnSound( "lightsaber/saber_on" .. math.random( 1, 4 ) .. ".wav" ) -- On s
 wep:SetOffSound( "lightsaber/saber_off" .. math.random( 1, 4 ) .. ".wav" ) -- Off sound
 
 -- These are optional
-wep:SetForceType( 1 ) -- Starting Force Type - 1 to 6
-wep:SetForce( 100 ) -- Starting Amount of Force. Will autoregen to 100.
+wep:SetForceType( 1 ) -- Starting Force Type - starts from 1 to the maximum amount of Force Powers on your server
+wep:SetForce( 100 ) -- Starting Amount of Force. Will autoregen to GetMaxForce().
+wep:WorksUnderwater( false ) -- Default = true, if set to false, will auto disable upon entering water
+wep:SetMaxForce( 100 ) -- Sets the maximum force amount. Default is 100.
 ```
 
 ## Creating Lightsaber models
