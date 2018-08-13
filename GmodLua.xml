@@ -172,6 +172,7 @@
 				self.ViewModel SWEP.ViewModel
 				self.WorldModel SWEP.WorldModel
 				self.CSMuzzleFlashes SWEP.CSMuzzleFlashes
+				self.CSMuzzleX SWEP.CSMuzzleX
 				self.Author SWEP.Author
 				self.Spawnable SWEP.Spawnable
 				self.AdminOnly SWEP.AdminOnly
@@ -183,7 +184,6 @@
 				self.ViewModelFOV SWEP.ViewModelFOV
 				self.ViewModelFlip SWEP.ViewModelFlip
 				self.Purpose SWEP.Purpose
-				self.HoldType SWEP.HoldType
 				self.AutoSwitchFrom SWEP.AutoSwitchFrom
 				self.Folder SWEP.Folder
 				self.DrawAmmo SWEP.DrawAmmo
@@ -198,6 +198,15 @@
 				self.WepSelectIcon SWEP.WepSelectIcon
 				self.BounceWeaponIcon SWEP.BounceWeaponIcon
 				self.RenderGroup SWEP.RenderGroup
+				self.m_WeaponDeploySpeed SWEP.m_WeaponDeploySpeed
+				self.ViewModelFlip1 SWEP.ViewModelFlip1
+				self.ViewModelFlip2 SWEP.ViewModelFlip2
+				self.Primary SWEP.Primary
+				self.Secondary SWEP.Secondary
+				self.AccurateCrosshair SWEP.AccurateCrosshair
+				self.DisableDuplicator SWEP.DisableDuplicator
+				self.ScriptedEntityType SWEP.ScriptedEntityType
+				self.m_bPlayPickupSound SWEP.m_bPlayPickupSound
 
 				Primary.ClipSize
 				Primary.DefaultClip
@@ -209,19 +218,19 @@
 				Secondary.Automatic
 				Secondary.Ammo
 
-				ENT.Base
-				ENT.AdminOnly
-				ENT.Spawnable
-				ENT.Author
-				ENT.Information
-				ENT.Folder
-				ENT.Contact
-				ENT.Instructions
-				ENT.Category
-				ENT.Purpose
-				ENT.ClassName
-				ENT.RenderGroup
-				ENT.PrintName
+				self.Base ENT.Base
+				self.AdminOnly ENT.AdminOnly
+				self.Spawnable ENT.Spawnable
+				self.Author ENT.Author
+				self.Information ENT.Information
+				self.Folder ENT.Folder
+				self.Contact ENT.Contact
+				self.Instructions ENT.Instructions
+				self.Category ENT.Category
+				self.Purpse ENT.Purpose
+				self.ClassName ENT.ClassName
+				self.RenderGroup ENT.RenderGroup
+				self.PrintName ENT.PrintName
 				self.BehaveThread
 				self.DisableDuplicator ENT.DisableDuplicator
 				self.Editable ENT.Editable
@@ -231,9 +240,9 @@
 				self.m_fMaxYawSpeed ENT.m_fMaxYawSpeed
 				self.m_iClass ENT.m_iClass
 
-				TOOL.Command
-				TOOL.Category
-				TOOL.Information
+				self.Command TOOL.Command
+				self.Category TOOL.Category
+				self.Information TOOL.Information
 				self.AddToMenu TOOL.AddToMenu
 				self.AllowedCVar TOOL.AllowedCVar
 				self.ClientConVar TOOL.ClientConVar
