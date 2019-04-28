@@ -187,8 +187,10 @@ wep:SetOffSound( "lightsaber/saber_off" .. math.random( 1, 4 ) .. ".wav" ) -- Of
 -- These are optional
 wep:SetForceType( 1 ) -- Starting Force Type - starts from 1 to the maximum amount of Force Powers on your server
 wep:SetForce( 100 ) -- Starting Amount of Force. Will autoregen to GetMaxForce().
-wep:WorksUnderwater( false ) -- Default = true, if set to false, will auto disable upon entering water
+wep:SetWorksUnderwater( false ) -- Default = true, if set to false, will auto disable upon entering water
 wep:SetMaxForce( 100 ) -- Sets the maximum force amount. Default is 100.
+
+wep.HitSound = "lightsaber/saber_hit.wav" -- Overrides the looping wall hit sound
 ```
 
 ## Creating Lightsaber models
